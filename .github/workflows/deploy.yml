@@ -58,7 +58,7 @@ jobs:
       - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ecs-task-def.json
+          task-definition: Restapitask-revision1.json
           service: my-ecs-service
           cluster: my-ecs-cluster
           wait-for-service-stability: true
