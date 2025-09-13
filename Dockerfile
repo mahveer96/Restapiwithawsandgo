@@ -1,31 +1,35 @@
 # -----------------------------
-# Stage 1: Build the Go binary
+# Build stage
 # -----------------------------
 FROM golang:1.24 AS builder
 
 WORKDIR /app
 
-# Copy the Go code
-COPY main.go .
+# Copy go.mod and go.sum first (for caching)
+COPY go.mod go.sum ./
+RUN go mod download
 
-# Build a statically linked binary for Alpine
+# Copy source files
+COPY . .
+
+# Build binary
 RUN CGO_ENABLED=0 GOOS=linux go build -o main main.go
 
 # -----------------------------
-# Stage 2: Minimal runtime image
+# Final stage
 # -----------------------------
 FROM alpine:latest
 
 WORKDIR /root/
 
-# Add certificates (optional, if HTTPS is needed)
+# Install CA certificates (optional)
 RUN apk add --no-cache ca-certificates
 
-# Copy the binary
+# Copy built binary
 COPY --from=builder /app/main .
 
 # Expose port
 EXPOSE 8081
 
-# Run the app
+# Run app
 CMD ["./main"]

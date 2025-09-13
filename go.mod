@@ -1,6 +1,6 @@
-module Restapiwithawsandgo
+module myapp
 
-go 1.24.3
+go 1.24.1
 
 require (
 	github.com/golang/snappy v0.0.4 // indirect
