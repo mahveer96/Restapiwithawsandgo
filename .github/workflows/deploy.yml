@@ -52,13 +52,13 @@ jobs:
       - name: Build, Tag, and Push image to ECR
         run: |
           docker build -t myapp .
-          docker tag myapp:latest ${{ steps.login-ecr.outputs.registry }}/myapp:latest
-          docker push ${{ steps.login-ecr.outputs.registry }}/myapp:latest
+          docker tag myapp:latest ${{ steps.login-ecr.outputs.registry }}/myapp-repo:latest
+          docker push ${{ steps.login-ecr.outputs.registry }}/myapp-repo:latest
 
       - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ecs-task-def.json
+          task-definition: ./ecs-task-def.json
           service: my-ecs-service
           cluster: my-ecs-cluster
           wait-for-service-stability: true
